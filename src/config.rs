@@ -4,11 +4,18 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct Config {
+    repos: Vec<RepoData>
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct RepoData {
+    path: String,
 }
 
 impl Config {
     pub fn default() -> Self {
         Config {
+            repos: vec![],
         }
     }
 
