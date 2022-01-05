@@ -29,15 +29,7 @@ impl Config {
         }
     }
 
-    pub fn load() -> Self {
-        let system = env::consts::OS;
-        println!("System: {}", system);
-        if system == "windows" {
-            // TODO: !MC - Figure out where to store configs on windows
-            println!("Windows Operating System is not fully supported yet. Loading default config.");
-            return Self::default()
-        }
-
+    pub fn determine_config_path() -> Option<PathBuf> {
         let home_dir = match env::var("HOME") {
             Ok(path) => {
                 let path = PathBuf::from(path);
@@ -46,17 +38,27 @@ impl Config {
                     path
                 } else {
                     println!("Home directory does not exist. Loading default config.");
-                    return Self::default()
+                    return None
                 }
             }
             Err(_) => {
                 println!("Could not find home directory. Ensure HOME env variable is set. Loading default config.");
-                return Self::default()
+                return None
             }
         };
 
         let config_path = home_dir.join(".wwidl").join("config.toml");
-        println!("Loading config from: {:?}", config_path);
+        Some(config_path)
+    }
+
+    pub fn load() -> Self {
+        let config_path = match Self::determine_config_path() {
+            Some(path) => path,
+            None => {
+                println!("Could not determine config path. Loading default config.");
+                return Self::default();
+            }
+        };
 
         if config_path.exists() {
             println!("Config file exists. Loading config.");
@@ -67,11 +69,25 @@ impl Config {
             let default_config = Self::default();
 
             // TODO: Errors should be handled by just printing a message and exiting
-            std::fs::create_dir_all(home_dir.join(".wwidl")).unwrap();
+            std::fs::create_dir_all(config_path.parent().unwrap()).unwrap();
             std::fs::write(&config_path, toml::to_string(&default_config).unwrap()).unwrap();
 
             default_config
         }
+    }
+
+    pub fn save(&self) {
+        let config_path = match Self::determine_config_path() {
+            Some(path) => path,
+            None => {
+                println!("Could not determine config path. Cannot save config. Config that would have been saved will be printed below.");
+                println!("{}", toml::to_string(&self).unwrap());
+                return;
+            }
+        };
+
+        // TODO: handle write errors
+        std::fs::write(config_path, toml::to_string(&self).unwrap()).unwrap();
     }
 
     pub fn repo_data_mut(&mut self, repo_path: &str) -> Option<&mut RepoData> {

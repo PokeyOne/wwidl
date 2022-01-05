@@ -21,4 +21,6 @@ pub fn execute(path: &PathBuf, mut config: Config, message: Option<String>) {
     };
 
     config.put_note(path_str, message);
+
+    config.save();
 }
