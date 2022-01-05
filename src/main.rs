@@ -41,7 +41,10 @@ enum Command {
     Check {
         /// The directory to check
         #[clap(required = false, parse(from_os_str), default_value = ".")]
-        path: PathBuf
+        path: PathBuf,
+        /// Show all the notes for the current directory
+        #[clap(long, short)]
+        all: bool,
     },
     /// Add a note to the current directory or a specified directory
     #[clap(setting(AppSettings::ArgRequiredElseHelp))]
@@ -60,8 +63,8 @@ fn main() {
     let config = Config::load();
 
     match &args.command {
-        Command::Check { path } => {
-            commands::check::execute(path, config);
+        Command::Check { path, all } => {
+            commands::check::execute(path, config, *all);
         }
         Command::Note { path, note } => {
             commands::note::execute(path, config, Some(note.clone()));
