@@ -25,13 +25,7 @@ mod config;
 use config::Config;
 
 fn main() {
-    let config = match Config::load() {
-        Ok(config) => config,
-        Err(e) => {
-            eprintln!("{:?}", e);
-            return
-        }
-    };
+    let config = Config::load();
 
     println!("Config loaded: {:?}", config);
 }
