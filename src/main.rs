@@ -21,6 +21,7 @@
  */
 
 mod config;
+mod commands;
 
 use std::path::PathBuf;
 use config::Config;
@@ -46,14 +47,11 @@ enum Command {
 
 fn main() {
     let args = Cli::parse();
-    println!("Args: {:?}", args);
+    let config = Config::load();
 
     match &args.command {
         Command::Check { path } => {
-            println!("Checking for notes in path `{}`", path.display());
+            commands::check::execute(path, config);
         }
     }
-
-    let config = Config::load();
-    println!("Config loaded: {:?}", config);
 }

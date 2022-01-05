@@ -63,4 +63,8 @@ impl Config {
             default_config
         }
     }
+
+    pub fn repo_data(&self, repo_path: &str) -> Option<&RepoData> {
+        self.repos.iter().find(|repo| repo.path == repo_path)
+    }
 }
