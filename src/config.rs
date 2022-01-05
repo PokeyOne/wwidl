@@ -119,6 +119,26 @@ impl Config {
     }
 }
 
+impl RepoData {
+    pub fn messages(&self) -> &Vec<MessageData> {
+        &self.messages
+    }
+
+    pub fn last_message(&self) -> Option<&MessageData> {
+        self.messages().last()
+    }
+}
+
+impl MessageData {
+    pub fn date(&self) -> &Datetime {
+        &self.date
+    }
+
+    pub fn message(&self) -> &str {
+        &self.message
+    }
+}
+
 /// Returns the current time as a
 /// [`Datetime`](https://docs.rs/toml/0.5.0/toml/value/struct.Datetime.html)
 pub fn current_datetime() -> Datetime {
