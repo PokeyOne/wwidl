@@ -1,0 +1,6 @@
+[[repos]]
+path = "/path/to/repo"
+
+[[repos.messages]]
+message = "test message"
+date = 2022-01-05T14:00:52.000000-08:00

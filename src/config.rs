@@ -1,3 +1,6 @@
+#[cfg(test)]
+mod tests;
+
 use std::env;
 use std::path::PathBuf;
 use serde::{Deserialize, Serialize};
@@ -60,6 +63,10 @@ impl Config {
             }
         };
 
+        Self::load_from_path(config_path)
+    }
+
+    pub fn load_from_path(config_path: PathBuf) -> Self {
         if config_path.exists() {
             println!("Config file exists. Loading config.");
             let config: Config = toml::from_str(std::fs::read_to_string(config_path).unwrap().as_str()).unwrap();
@@ -120,6 +127,11 @@ impl Config {
 }
 
 impl RepoData {
+    pub fn path(&self) -> &str {
+        &self.path
+    }
+
+    /// Returns a reference to the vector of messages relating to this repo
     pub fn messages(&self) -> &Vec<MessageData> {
         &self.messages
     }
