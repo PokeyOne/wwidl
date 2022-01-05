@@ -2,7 +2,8 @@ use std::path::PathBuf;
 use crate::Config;
 
 pub fn execute(path: &PathBuf, config: Config) {
-    let path_str = match path.to_str() {
+    let canon_path = path.canonicalize().unwrap();
+    let path_str = match canon_path.to_str() {
         Some(path_str) => path_str,
         None => {
             eprintln!("{}", "Path is not valid UTF-8");
