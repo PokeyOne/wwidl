@@ -22,10 +22,38 @@
 
 mod config;
 
+use std::path::PathBuf;
 use config::Config;
+use clap::{AppSettings, Parser, Subcommand};
+
+#[derive(Parser, Debug)]
+#[clap(name = "wwidl", version, author, about)]
+struct Cli {
+    #[clap(subcommand)]
+    command: Command
+}
+
+#[derive(Subcommand, Debug)]
+enum Command {
+    /// Check for the latest notes in the current directory
+    #[clap(setting(AppSettings::ArgRequiredElseHelp))]
+    Check {
+        /// The directory to check
+        #[clap(required = false, parse(from_os_str), default_value = ".")]
+        path: PathBuf
+    },
+}
 
 fn main() {
-    let config = Config::load();
+    let args = Cli::parse();
+    println!("Args: {:?}", args);
 
+    match &args.command {
+        Command::Check { path } => {
+            println!("Checking for notes in path `{}`", path.display());
+        }
+    }
+
+    let config = Config::load();
     println!("Config loaded: {:?}", config);
 }
