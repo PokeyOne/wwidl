@@ -57,3 +57,26 @@ fn test_get_last_message() {
         expected_date_string
     );
 }
+
+#[test]
+fn test_current_datetime() {
+    // creation shouldn't blow up
+    let dt = current_datetime();
+
+    // should not be the same as the first
+    let dt2 = current_datetime();
+    assert_ne!(dt, dt2);
+}
+
+#[test]
+fn test_put_note() {
+    let mut config = create_example_config!();
+    let repo_count_before = config.repos.len();
+    config.put_note(&"/path/to/foo/bar/another/repo", "another test message".to_string());
+    let repo_count_after = config.repos.len();
+    assert_eq!(repo_count_before + 1, repo_count_after);
+
+    let repo_data = config.repo_data(&"/path/to/foo/bar/another/repo").unwrap();
+    assert_eq!(repo_data.messages().len(), 1);
+    assert_eq!(repo_data.messages()[0].message(), "another test message");
+}
