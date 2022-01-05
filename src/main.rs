@@ -43,6 +43,16 @@ enum Command {
         #[clap(required = false, parse(from_os_str), default_value = ".")]
         path: PathBuf
     },
+    /// Add a note to the current directory or a specified directory
+    #[clap(setting(AppSettings::ArgRequiredElseHelp))]
+    Note {
+        /// The directory to check
+        #[clap(required = false, parse(from_os_str), default_value = ".")]
+        path: PathBuf,
+        /// The note to add
+        #[clap(required = true, long, short)]
+        note: String
+    },
 }
 
 fn main() {
@@ -52,6 +62,9 @@ fn main() {
     match &args.command {
         Command::Check { path } => {
             commands::check::execute(path, config);
+        }
+        Command::Note { path, note } => {
+            commands::note::execute(path, config, Some(note.clone()));
         }
     }
 }
