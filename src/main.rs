@@ -79,8 +79,7 @@ fn main() {
             commands::note::execute(path, config, Some(note.clone()));
         }
         Command::Remove { path, count } => {
-            todo!("Remove command");
-            //commands::remove::execute(path, config, *count);
+            commands::remove::execute(path, config, *count);
         }
     }
 }

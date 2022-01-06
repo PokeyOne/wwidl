@@ -80,3 +80,26 @@ fn test_put_note() {
     assert_eq!(repo_data.messages().len(), 1);
     assert_eq!(repo_data.messages()[0].message(), "another test message");
 }
+
+#[test]
+fn test_remove_note() {
+    let mut config = create_example_config!();
+    let note_count_before = config.repos[0].messages().len();
+    let result = config.remove_notes(&"/path/to/repo", 1);
+    let note_count_after = config.repos[0].messages().len();
+    assert_eq!(note_count_before - 1, note_count_after);
+    assert_eq!(result.len(), 1);
+
+    let repo_data = config.repo_data(&"/path/to/repo");
+    assert!(repo_data.is_some());
+}
+
+#[test]
+fn test_remove_two_notes() {
+    let mut config = create_example_config!();
+    let result = config.remove_notes(&"/path/to/repo", 2);
+    assert!(result.is_empty());
+
+    let repo_data = config.repo_data(&"/path/to/repo");
+    assert!(repo_data.is_none());
+}

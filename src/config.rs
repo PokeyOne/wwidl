@@ -124,6 +124,35 @@ impl Config {
             }
         }
     }
+
+    pub fn remove_notes(&mut self, repo_path: &str, mut count: usize) -> Vec<MessageData> {
+        let mut should_remove_directory_data = false;
+        let mut popped_messages = Vec::new();
+
+        match self.repo_data_mut(repo_path) {
+            Some(data) => {
+                if count >= data.messages.len() {
+                    should_remove_directory_data = true;
+                } else {
+                    // Count is less than the number of messages in the repo
+                    // at this point, so we can just remove the messages
+                    while count > 0 {
+                        popped_messages.push(data.messages.pop().unwrap());
+                        count -= 1;
+                    }
+                }
+            }
+            None => {
+                println!("No notes found for repo: {}", repo_path);
+            }
+        }
+
+        if should_remove_directory_data {
+            self.repos.retain(|repo| repo.path != repo_path);
+        }
+
+        popped_messages
+    }
 }
 
 impl RepoData {
