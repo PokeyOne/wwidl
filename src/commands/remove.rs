@@ -24,4 +24,6 @@ pub fn execute(path: &PathBuf, mut config: Config, mut count: usize) {
     } else {
         println!("Removed {} notes for {}", removed_notes.len(), path_str);
     }
+
+    config.save();
 }
