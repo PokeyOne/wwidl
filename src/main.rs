@@ -56,6 +56,15 @@ enum Command {
         #[clap(required = true, long, short)]
         note: String
     },
+    /// Remove a note from the current directory or a specified directory
+    #[clap(setting(AppSettings::ArgRequiredElseHelp))]
+    Remove {
+        /// The directory to check
+        #[clap(required = false, parse(from_os_str), default_value = ".")]
+        path: PathBuf,
+        #[clap(required = false, long, short, default_value = "1")]
+        count: usize,
+    },
 }
 
 fn main() {
@@ -68,6 +77,10 @@ fn main() {
         }
         Command::Note { path, note } => {
             commands::note::execute(path, config, Some(note.clone()));
+        }
+        Command::Remove { path, count } => {
+            todo!("Remove command");
+            //commands::remove::execute(path, config, *count);
         }
     }
 }
