@@ -125,6 +125,9 @@ impl Config {
         }
     }
 
+    /// Remove a certain number of latest notes from a directory entry. Will
+    /// remove the directory entry if it has no notes left. The returned vec
+    /// will contain all the notes that were removed.
     pub fn remove_notes(&mut self, repo_path: &str, mut count: usize) -> Vec<MessageData> {
         let mut should_remove_directory_data = false;
         let mut popped_messages = Vec::new();

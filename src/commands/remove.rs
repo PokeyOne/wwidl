@@ -1,6 +1,8 @@
 use std::path::PathBuf;
 use crate::Config;
 
+/// Remove a certain number of notes about a directory. Will also remove the
+/// directory entry if there are no more notes left.
 pub fn execute(path: &PathBuf, mut config: Config, mut count: usize) {
     // TODO: Handle this error gracefully. Just print an error and exit if it fails
     //       essentially telling the user that the file doesn't exist.
