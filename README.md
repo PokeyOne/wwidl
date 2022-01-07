@@ -2,6 +2,10 @@
 This project is meant to be a CLI tool for writing notes about what you were
 doing last time you were working on a project/directory.
 
+I realise after making this that most of the function of this app can be replaced
+by simply writing better git commit messages, but I guess this can be used for
+cases where there isnt' a git repo or if something more specific is needed.
+
 [license](COPYING)
 
 ## Usage
