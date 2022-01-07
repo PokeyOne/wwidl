@@ -98,7 +98,7 @@ fn test_remove_note() {
 fn test_remove_two_notes() {
     let mut config = create_example_config!();
     let result = config.remove_notes(&"/path/to/repo", 2);
-    assert!(result.is_empty());
+    assert_eq!(result.len(), 2);
 
     let repo_data = config.repo_data(&"/path/to/repo");
     assert!(repo_data.is_none());
