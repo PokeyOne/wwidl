@@ -150,10 +150,15 @@ impl Config {
             }
         }
 
+        // If there are no more notes left in the directory, remove the
+        // directory data
         if should_remove_directory_data {
-            self.repos.retain(|repo| repo.path != repo_path);
+            // Safe to unwrap because we know that the repo exists
+            let popped_repo = self.repos.iter().position(|repo| repo.path == repo_path).unwrap();
+            popped_messages.append(&mut self.repos.remove(popped_repo).messages);
         }
 
+        // Return the popped messages
         popped_messages
     }
 }
